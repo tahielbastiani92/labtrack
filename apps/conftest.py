@@ -1,9 +1,9 @@
 import pytest
 
 from apps.accounts.models import User
+from apps.datasets.models import Dataset
 from apps.projects.models import Project, ProjectMembership
 from apps.samples.models import Sample
-from apps.datasets.models import Dataset
 
 
 @pytest.fixture
