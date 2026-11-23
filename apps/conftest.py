@@ -2,6 +2,7 @@ import pytest
 
 from apps.accounts.models import User
 from apps.projects.models import Project, ProjectMembership
+from apps.samples.models import Sample
 
 
 @pytest.fixture
@@ -65,3 +66,13 @@ def member_project(other_user, member_user):
     project = Project.objects.create(name="Member project", created_by=other_user)
     ProjectMembership.objects.create(project=project, user=member_user)
     return project
+
+
+@pytest.fixture
+def sample(owned_project, user):
+    return Sample.objects.create(
+        project=owned_project,
+        code="S-001",
+        sample_type="blood",
+        created_by=user,
+    )
