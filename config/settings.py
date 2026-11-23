@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.projects",
     "apps.samples",
+    "apps.datasets",
 ]
 
 MIDDLEWARE = [

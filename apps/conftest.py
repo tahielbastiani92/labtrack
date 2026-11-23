@@ -3,6 +3,7 @@ import pytest
 from apps.accounts.models import User
 from apps.projects.models import Project, ProjectMembership
 from apps.samples.models import Sample
+from apps.datasets.models import Dataset
 
 
 @pytest.fixture
@@ -74,5 +75,14 @@ def sample(owned_project, user):
         project=owned_project,
         code="S-001",
         sample_type="blood",
+        created_by=user,
+    )
+
+
+@pytest.fixture
+def dataset(owned_project, user):
+    return Dataset.objects.create(
+        project=owned_project,
+        name="Dataset A",
         created_by=user,
     )
