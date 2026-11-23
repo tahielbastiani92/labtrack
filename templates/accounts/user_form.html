@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header">
+                    <h1 class="h4 mb-0">{{ title }}</h1>
+                </div>
+                <div class="card-body">
+
+                    <p>Context user: {{ user.username }}</p>
+                    <p>Request user: {{ request.user.username }}</p>
+                    <p>Authenticated ID: {{ request.user.pk }}</p>
+                    {% if target_user and target_user.pk == user.pk %}
+                        <div class="alert alert-info">
+                            You are editing your own account. Your account cannot be deactivated or lose its
+                            administrator role.
+                        </div>
+                    {% endif %}
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% include "partials/form.html" %}
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary" type="submit">{{ submit_label }}</button>
+                            <a class="btn btn-outline-secondary" href="{{ cancel_url }}">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
