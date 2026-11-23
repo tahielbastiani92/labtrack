@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}{{ dataset.name }} — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ dataset.name }}</h1>
+            <p class="text-muted mb-0">
+                <a href="{% url 'projects:detail' dataset.project.pk %}">{{ dataset.project.name }}</a> ·
+                {{ dataset.get_data_format_display }}
+            </p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-secondary">{{ dataset.get_data_format_display }}</span>
+            {% if can_write %}
+                <a class="btn btn-outline-secondary btn-sm" href="{% url 'datasets:update' dataset.pk %}">Edit</a>
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'datasets:delete' dataset.pk %}">Delete</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Details</div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Project</dt>
+                        <dd class="col-sm-8"><a href="{% url 'projects:detail' dataset.project.pk %}">{{ dataset.project.name }}</a></dd>
+
+                        <dt class="col-sm-4">Format</dt>
+                        <dd class="col-sm-8">{{ dataset.get_data_format_display }}</dd>
+
+                        <dt class="col-sm-4">Storage URI</dt>
+                        <dd class="col-sm-8">
+                            {% if dataset.storage_uri %}
+                                <code class="text-break">{{ dataset.storage_uri }}</code>
+                            {% else %}
+                                <span class="text-muted">Not recorded</span>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-sm-4">Created by</dt>
+                        <dd class="col-sm-8">{{ dataset.created_by.username }}</dd>
+
+                        <dt class="col-sm-4">Created</dt>
+                        <dd class="col-sm-8">{{ dataset.created_at|date:"Y-m-d H:i" }}</dd>
+
+                        <dt class="col-sm-4">Updated</dt>
+                        <dd class="col-sm-8">{{ dataset.updated_at|date:"Y-m-d H:i" }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Description</div>
+                <div class="card-body">
+                    {% if dataset.description %}
+                        <p class="mb-0">{{ dataset.description|linebreaksbr }}</p>
+                    {% else %}
+                        <p class="text-muted mb-0">No description.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-header">Associated samples</div>
+        <ul class="list-group list-group-flush">
+            {% for sample in dataset.samples.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'samples:detail' sample.pk %}">{{ sample.code }}</a>
+                    <span class="text-muted small">{{ sample.sample_type }}</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">This dataset is not linked to any sample.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="mt-3">
+        <a class="btn btn-outline-secondary" href="{% url 'projects:detail' dataset.project.pk %}">Back to project</a>
+    </div>
+{% endblock %}

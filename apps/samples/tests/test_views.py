@@ -137,6 +137,18 @@ def test_sample_project_cannot_be_changed(client, user, sample, member_project):
 
 
 @pytest.mark.django_db
+def test_sample_detail_renders_for_visible_sample(client, user, sample, dataset):
+    dataset.samples.add(sample)
+    client.force_login(user)
+    response = client.get(reverse("samples:detail", args=[sample.pk]))
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert sample.code in content
+    assert dataset.name in content
+
+
+@pytest.mark.django_db
 def test_sample_detail_is_hidden_from_non_members(client, user, member_project, other_user):
     hidden = Sample.objects.create(
         project=member_project,

@@ -20,6 +20,7 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'projects:list' %}">Projects</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'samples:list' %}">Samples</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'datasets:list' %}">Datasets</a></li>
                     {% if user.is_administrator %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'accounts:user_list' %}">Users</a></li>
                     {% endif %}

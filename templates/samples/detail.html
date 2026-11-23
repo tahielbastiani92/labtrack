@@ -74,6 +74,19 @@
         </div>
     </div>
 
+    <div class="card shadow-sm mt-4">
+        <div class="card-header">Linked datasets</div>
+        <ul class="list-group list-group-flush">
+            {% for dataset in sample.datasets.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'datasets:detail' dataset.pk %}">{{ dataset.name }}</a>
+                    <span class="badge bg-secondary">{{ dataset.get_data_format_display }}</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">This sample is not linked to any dataset.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
     <div class="mt-3">
         <a class="btn btn-outline-secondary" href="{% url 'projects:detail' sample.project.pk %}">Back to project</a>

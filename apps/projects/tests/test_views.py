@@ -24,6 +24,21 @@ def test_project_list_is_scoped_to_visible_projects(
 
 
 @pytest.mark.django_db
+def test_archived_project_detail_hides_write_actions(client, user, owned_project, dataset):
+    owned_project.status = Project.Status.ARCHIVED
+    owned_project.save(update_fields=["status"])
+
+    client.force_login(user)
+    response = client.get(reverse("projects:detail", args=[owned_project.pk]))
+
+    assert response.status_code == 200
+    content = response.content.decode()
+    assert "Add sample" not in content
+    assert "Add dataset" not in content
+    assert "Archived projects are read-only" in content
+
+
+@pytest.mark.django_db
 def test_project_list_paginates(client, user):
     for index in range(21):
         Project.objects.create(name=f"Project {index}", created_by=user)
