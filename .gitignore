@@ -29,3 +29,7 @@ Thumbs.db
 
 # Local databases
 *.sqlite3
+# Local-only documentation and agent notes
+docs/*.es.md
+AGENTS.md
+session-ses_dfa4.md
