@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Dashboard</h1>
+            <p class="text-muted mb-0">Records you are authorized to access.</p>
+        </div>
+        <a class="btn btn-primary" href="{% url 'projects:create' %}">New project</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Projects</div>
+                    <div class="display-6">{{ project_count }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Samples</div>
+                    <div class="display-6">{{ sample_count }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Datasets</div>
+                    <div class="display-6">{{ dataset_count }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Recently updated projects</div>
+                <ul class="list-group list-group-flush">
+                    {% for project in recent_projects %}
+                        <li class="list-group-item">
+                            <a href="{% url 'projects:detail' project.pk %}">{{ project.name }}</a>
+                            <div class="small text-muted">{{ project.get_status_display }} · {{ project.updated_at|date:"Y-m-d H:i" }}</div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No projects yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Recently updated samples</div>
+                <ul class="list-group list-group-flush">
+                    {% for sample in recent_samples %}
+                        <li class="list-group-item">
+                            <a href="{% url 'samples:detail' sample.pk %}">{{ sample.code }}</a>
+                            <div class="small text-muted">{{ sample.project.name }} · {{ sample.updated_at|date:"Y-m-d H:i" }}</div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No samples yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header">Recently updated datasets</div>
+                <ul class="list-group list-group-flush">
+                    {% for dataset in recent_datasets %}
+                        <li class="list-group-item">
+                            <a href="{% url 'datasets:detail' dataset.pk %}">{{ dataset.name }}</a>
+                            <div class="small text-muted">{{ dataset.project.name }} · {{ dataset.updated_at|date:"Y-m-d H:i" }}</div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No datasets yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
