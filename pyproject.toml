@@ -1,0 +1,41 @@
+[project]
+name = "labtrack"
+version = "0.1.0"
+description = "Portfolio demonstrator for managing research projects, samples and dataset metadata."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "Django~=6.1.3",
+    "djangorestframework~=3.18.3",
+    "gunicorn>=27.0.1",
+    "psycopg[binary]>=3.2,<4",
+    "python-dotenv>=1.0,<2",
+    "whitenoise>=6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0,<9",
+    "pytest-django>=4.9,<5",
+    "ruff>=0.9",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py", "*_tests.py"]
+testpaths = ["apps"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
