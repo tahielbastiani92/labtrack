@@ -3,10 +3,12 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
 from apps.projects.api import ProjectMembershipViewSet, ProjectViewSet
+from apps.samples.api import SampleViewSet
 
 router = DefaultRouter()
 router.register("projects", ProjectViewSet, basename="project")
 router.register("memberships", ProjectMembershipViewSet, basename="membership")
+router.register("samples", SampleViewSet, basename="sample")
 
 urlpatterns = [
     path("auth/token/", obtain_auth_token, name="api_token"),

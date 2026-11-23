@@ -19,6 +19,7 @@
             <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'projects:list' %}">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'samples:list' %}">Samples</a></li>
                     {% if user.is_administrator %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'accounts:user_list' %}">Users</a></li>
                     {% endif %}

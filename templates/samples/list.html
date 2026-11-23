@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Samples — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Samples</h1>
+            <p class="text-muted mb-0">
+                {% if current_project_obj %}
+                    Samples in <a href="{% url 'projects:detail' current_project_obj.pk %}">{{ current_project_obj.name }}</a>.
+                    <a href="{% url 'samples:list' %}">Clear project filter</a>.
+                {% else %}
+                    Samples from projects you can access.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <form method="get" class="row g-2 mb-3">
+        {% if current_project %}
+            <input type="hidden" name="project" value="{{ current_project }}">
+        {% endif %}
+        <div class="col-md-4">
+            <input class="form-control" type="search" name="q" value="{{ current_q }}" placeholder="Search by code">
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" type="search" name="type" value="{{ current_type }}" placeholder="Sample type">
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" name="status">
+                <option value="">All statuses</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-primary w-100" type="submit">Filter</button>
+        </div>
+    </form>
+
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Project</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Collected</th>
+                    <th>Updated</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sample in samples %}
+                    <tr>
+                        <td><a class="fw-semibold" href="{% url 'samples:detail' sample.pk %}">{{ sample.code }}</a></td>
+                        <td><a href="{% url 'projects:detail' sample.project.pk %}">{{ sample.project.name }}</a></td>
+                        <td>{{ sample.sample_type }}</td>
+                        <td>
+                            {% if sample.status == "registered" %}
+                                <span class="badge bg-secondary">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "processing" %}
+                                <span class="badge bg-warning text-dark">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "stored" %}
+                                <span class="badge bg-info text-dark">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "consumed" %}
+                                <span class="badge bg-dark">{{ sample.get_status_display }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ sample.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ sample.collection_date|default:"—" }}</td>
+                        <td class="text-muted small">{{ sample.updated_at|date:"Y-m-d H:i" }}</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'samples:detail' sample.pk %}">View</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">No samples match the current filters.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        {% include "partials/pagination.html" %}
+    </div>
+{% endblock %}

@@ -82,4 +82,57 @@
             {% endif %}
         </div>
     </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <span>Samples</span>
+            <div class="d-flex gap-2">
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'samples:list' %}?project={{ project.pk }}">View all</a>
+                {% if can_write %}
+                    <a class="btn btn-sm btn-primary" href="{% url 'samples:create' project.pk %}">Add sample</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Collected</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sample in samples %}
+                    <tr>
+                        <td><a href="{% url 'samples:detail' sample.pk %}">{{ sample.code }}</a></td>
+                        <td>{{ sample.sample_type }}</td>
+                        <td>
+                            {% if sample.status == "registered" %}
+                                <span class="badge bg-secondary">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "processing" %}
+                                <span class="badge bg-warning text-dark">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "stored" %}
+                                <span class="badge bg-info text-dark">{{ sample.get_status_display }}</span>
+                            {% elif sample.status == "consumed" %}
+                                <span class="badge bg-dark">{{ sample.get_status_display }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ sample.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ sample.collection_date|default:"—" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No samples registered.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if not can_write %}
+            <div class="card-footer small text-muted">Archived projects are read-only for samples and datasets.</div>
+        {% endif %}
+    </div>
 {% endblock %}
