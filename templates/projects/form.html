@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <h1 class="h3 mb-3">{{ title }}</h1>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% include "partials/form.html" %}
+                        <button class="btn btn-primary" type="submit">{{ submit_label|default:"Save" }}</button>
+                        <a class="btn btn-secondary" href="{{ cancel_url }}">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

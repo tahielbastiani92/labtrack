@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title|default:"Confirm deletion" }} — LabTrack{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-body">
+                    <h1 class="h4 text-danger">{{ title|default:"Confirm deletion" }}</h1>
+                    <p class="mb-4">Are you sure you want to delete <strong>{{ object }}</strong>? This action cannot be undone.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                        <a class="btn btn-secondary" href="{{ cancel_url }}">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
