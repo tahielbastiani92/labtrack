@@ -1,0 +1,294 @@
+{
+  "users": [
+    {
+      "username": "demo_admin",
+      "email": "demo_admin@example.com",
+      "first_name": "Demo",
+      "last_name": "Administrator",
+      "role": "administrator"
+    },
+    {
+      "username": "researcher_anna",
+      "email": "anna@example.com",
+      "first_name": "Anna",
+      "last_name": "Nielsen",
+      "role": "researcher"
+    },
+    {
+      "username": "researcher_marcus",
+      "email": "marcus@example.com",
+      "first_name": "Marcus",
+      "last_name": "Andersen",
+      "role": "researcher"
+    },
+    {
+      "username": "researcher_sophia",
+      "email": "sophia@example.com",
+      "first_name": "Sophia",
+      "last_name": "Larsen",
+      "role": "researcher"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Fermentation Monitoring",
+      "description": "Monitoring microbial activity and fermentation parameters in experimental food production.",
+      "status": "active",
+      "created_by": "researcher_anna",
+      "members": [
+        "researcher_marcus",
+        "researcher_sophia"
+      ]
+    },
+    {
+      "name": "Plant-Based Protein Stability",
+      "description": "Evaluating the physical and chemical stability of plant-based protein formulations.",
+      "status": "completed",
+      "created_by": "researcher_marcus",
+      "members": [
+        "researcher_anna"
+      ]
+    },
+    {
+      "name": "Food Shelf-Life Study",
+      "description": "Studying quality indicators and storage conditions affecting food shelf life.",
+      "status": "archived",
+      "created_by": "researcher_sophia",
+      "members": [
+        "researcher_anna",
+        "researcher_marcus"
+      ]
+    }
+  ],
+  "samples": [
+    {
+      "code": "FER-001",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Sourdough",
+      "collection_date": "2026-10-01",
+      "status": "processing",
+      "notes": "Initial fermentation sample.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "FER-002",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Sourdough",
+      "collection_date": "2026-10-02",
+      "status": "stored",
+      "notes": "Stored for further analysis.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "FER-003",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Kefir",
+      "collection_date": "2026-10-03",
+      "status": "registered",
+      "notes": "Awaiting processing.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "FER-004",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Kefir",
+      "collection_date": "2026-10-04",
+      "status": "consumed",
+      "notes": "Analysis completed.",
+      "created_by": "researcher_sophia"
+    },
+    {
+      "code": "FER-005",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Kimchi",
+      "collection_date": "2026-10-05",
+      "status": "discarded",
+      "notes": "Excluded from analysis.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "FER-006",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Kimchi",
+      "collection_date": "2026-10-06",
+      "status": "stored",
+      "notes": "Reference sample.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "FER-007",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Yogurt",
+      "collection_date": "2026-10-07",
+      "status": "processing",
+      "notes": "Microbial activity analysis.",
+      "created_by": "researcher_sophia"
+    },
+    {
+      "code": "FER-008",
+      "project": "Fermentation Monitoring",
+      "sample_type": "Yogurt",
+      "collection_date": "2026-10-08",
+      "status": "registered",
+      "notes": "Newly registered sample.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "PRO-001",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Pea Protein",
+      "collection_date": "2026-09-01",
+      "status": "consumed",
+      "notes": "Protein solubility analysis completed.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "PRO-002",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Soy Protein",
+      "collection_date": "2026-09-02",
+      "status": "stored",
+      "notes": "Retained reference sample.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "PRO-003",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Oat Protein",
+      "collection_date": "2026-09-03",
+      "status": "consumed",
+      "notes": "Stability testing completed.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "PRO-004",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Pea Protein",
+      "collection_date": "2026-09-04",
+      "status": "discarded",
+      "notes": "Excluded due to inconsistent results.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "PRO-005",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Soy Protein",
+      "collection_date": "2026-09-05",
+      "status": "stored",
+      "notes": "Archived reference material.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "PRO-006",
+      "project": "Plant-Based Protein Stability",
+      "sample_type": "Oat Protein",
+      "collection_date": "2026-09-06",
+      "status": "consumed",
+      "notes": "Final laboratory analysis completed.",
+      "created_by": "researcher_marcus"
+    },
+    {
+      "code": "SHE-001",
+      "project": "Food Shelf-Life Study",
+      "sample_type": "Plant-Based Beverage",
+      "collection_date": "2026-08-01",
+      "status": "stored",
+      "notes": "Cold storage reference sample.",
+      "created_by": "researcher_sophia"
+    },
+    {
+      "code": "SHE-002",
+      "project": "Food Shelf-Life Study",
+      "sample_type": "Plant-Based Beverage",
+      "collection_date": "2026-08-02",
+      "status": "consumed",
+      "notes": "Shelf-life evaluation completed.",
+      "created_by": "researcher_sophia"
+    },
+    {
+      "code": "SHE-003",
+      "project": "Food Shelf-Life Study",
+      "sample_type": "Ready Meal",
+      "collection_date": "2026-08-03",
+      "status": "discarded",
+      "notes": "Sample excluded from final evaluation.",
+      "created_by": "researcher_anna"
+    },
+    {
+      "code": "SHE-004",
+      "project": "Food Shelf-Life Study",
+      "sample_type": "Ready Meal",
+      "collection_date": "2026-08-04",
+      "status": "stored",
+      "notes": "Final reference sample.",
+      "created_by": "researcher_sophia"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "Fermentation Microbial Reads",
+      "project": "Fermentation Monitoring",
+      "description": "Synthetic sequencing dataset for fermentation samples.",
+      "data_format": "FASTQ",
+      "storage_uri": "demo://fermentation/microbial-reads",
+      "samples": [
+        "FER-001",
+        "FER-003",
+        "FER-007"
+      ],
+      "created_by": "researcher_anna"
+    },
+    {
+      "name": "Fermentation Parameters",
+      "project": "Fermentation Monitoring",
+      "description": "Synthetic measurements of fermentation parameters.",
+      "data_format": "CSV",
+      "storage_uri": "demo://fermentation/parameters",
+      "samples": [
+        "FER-002",
+        "FER-004",
+        "FER-006"
+      ],
+      "created_by": "researcher_marcus"
+    },
+    {
+      "name": "Protein Stability Sequences",
+      "project": "Plant-Based Protein Stability",
+      "description": "Synthetic sequence dataset for protein stability research.",
+      "data_format": "FASTA",
+      "storage_uri": "demo://protein-stability/sequences",
+      "samples": [
+        "PRO-001",
+        "PRO-002",
+        "PRO-003"
+      ],
+      "created_by": "researcher_marcus"
+    },
+    {
+      "name": "Protein Stability Measurements",
+      "project": "Plant-Based Protein Stability",
+      "description": "Synthetic measurements from protein stability experiments.",
+      "data_format": "CSV",
+      "storage_uri": "demo://protein-stability/measurements",
+      "samples": [
+        "PRO-004",
+        "PRO-005",
+        "PRO-006"
+      ],
+      "created_by": "researcher_anna"
+    },
+    {
+      "name": "Shelf-Life Sequencing",
+      "project": "Food Shelf-Life Study",
+      "description": "Synthetic sequencing dataset for food shelf-life samples.",
+      "data_format": "FASTQ",
+      "storage_uri": "demo://shelf-life/sequencing",
+      "samples": [
+        "SHE-001",
+        "SHE-002",
+        "SHE-004"
+      ],
+      "created_by": "researcher_sophia"
+    }
+  ]
+}
