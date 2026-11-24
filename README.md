@@ -1,124 +1,108 @@
 # LabTrack
 
-**Research Sample Management System — portfolio demonstrator**
+**Research Sample Management System — Portfolio Demonstrator**
 
-LabTrack is an independent web application concept for organizing research projects, laboratory samples, and related datasets. It is being built as a software-development portfolio project to demonstrate Python, Django, Django REST Framework, relational data modeling, automated testing, and practical engineering workflows.
+LabTrack is an independent web application for organizing research projects, laboratory samples, and related datasets.
 
-> **Status:** MVP implementation complete. The Django project scaffold, custom user model, domain models, migrations, HTML workflows, administrator user management, and REST API endpoints are in place. Free deployment configuration is prepared but the application is not deployed yet.
->
-> **Important:** LabTrack is a fictional demonstrator. It is not a certified LIMS, does not perform scientific analysis, and is not intended for clinical, diagnostic, or regulated research use.
+It was developed as a software engineering portfolio project to demonstrate practical experience with Python, Django, Django REST Framework, relational data modeling, automated testing, and application deployment.
 
-## Planned MVP
+**Live demo:** [https://labtrack-8zwv.onrender.com/](https://labtrack-8zwv.onrender.com/)
+**Source code:** [https://github.com/tahielbastiani92/labtrack](https://github.com/tahielbastiani92/labtrack)
 
-- User authentication and role-based access (administrator/researcher).
-- Research project creation and membership.
-- Sample registration and status tracking.
-- Dataset metadata linked to projects and samples.
-- Search and filtering.
-- A dashboard with basic operational counts.
-- HTML interface using Django templates and Bootstrap.
-- REST API using Django REST Framework.
-- Automated tests, Docker-based local development, and CI.
+> **Demo access:** A demonstration administrator account is available. Contact the project author for the login credentials.
 
-## Technology direction
+> **Important:** LabTrack is a fictional demonstrator, not a certified Laboratory Information Management System (LIMS). It does not perform scientific analysis and is not intended for clinical, diagnostic, or regulated research use.
 
-- Python 3.13
-- Django 6.1.x
-- Django REST Framework 3.18.x
-- PostgreSQL 17
-- `uv`
-- Django templates, Bootstrap 5, vanilla JavaScript
-- Pytest / pytest-django
-- Docker Compose
-- GitHub Actions
+## Features
 
-Versions are selected based on the compatibility information available during the project design (November 2026). Use current compatible patch releases within the selected minor series.
+- User authentication and role-based access control (administrator/researcher).
+- Research project creation and management.
+- Project membership management.
+- Laboratory sample registration and status tracking.
+- Dataset metadata management and sample relationships.
+- Search, filtering, and paginated results.
+- Dashboard with operational summaries.
+- HTML interface built with Django templates and Bootstrap.
+- REST API built with Django REST Framework.
+- Automated tests for domain logic, permissions, HTML workflows, administration, and API endpoints.
 
-## Documentation
+## Technology Stack
 
-- [Product definition (English)](docs/01-product-definition.en.md)
-- [Data model (English)](docs/02-data-model.en.md)
-- [Architecture decisions (English)](docs/03-architecture-decisions.en.md)
+| Area                    | Technologies                                      |
+| ----------------------- | ------------------------------------------------- |
+| Backend                 | Python 3.13, Django 6.1                           |
+| REST API                | Django REST Framework 3.18                        |
+| Database                | PostgreSQL 17                                     |
+| Frontend                | Django Templates, Bootstrap 5, vanilla JavaScript |
+| Testing                 | Pytest, pytest-django                             |
+| Code quality            | Ruff                                              |
+| Dependency management   | uv                                                |
+| Development environment | Docker Compose                                    |
+| CI                      | GitHub Actions                                    |
+| Deployment              | Render, Neon PostgreSQL                           |
 
-## Local development
+The application uses Django's server-rendered templates rather than a separate React frontend. JavaScript is used for client-side interactions.
 
-Prerequisites: Python 3.13 (managed by `uv`), `uv`, and Docker with Compose.
+## Application Structure
 
-```bash
-cp .env.example .env
-docker compose up -d db
-uv sync
-uv run python manage.py migrate
-uv run python manage.py createsuperuser
-uv run python manage.py runserver
-```
+The project is organized into Django applications:
 
-The database is exposed on host port `5434` by default to avoid conflicts with an existing local PostgreSQL instance. Change `POSTGRES_PORT` in `.env` and `docker-compose.yml` together if needed.
+- `accounts`: custom user model, authentication, and application roles.
+- `projects`: research projects, memberships, and project-level permissions.
+- `samples`: sample registration, management, and status transitions.
+- `datasets`: dataset metadata and relationships with projects and samples.
 
-After creating the first superuser, set the application role to `administrator` in the Django admin or shell. Once an administrator exists, use `/accounts/users/` to create and manage application users from the web interface. The application role is independent from Django's `is_staff` and `is_superuser` flags.
+The application distinguishes between Django's built-in staff/superuser permissions and its own application-level roles.
 
-The API uses session authentication for the browsable API and token authentication for independent clients. Obtain a token with `POST /api/v1/auth/token/` using a username and password, then send it as `Authorization: Token <token>`.
+Project visibility and management permissions are enforced at the application level. Dataset relationships are validated to ensure that associated samples belong to the same project.
 
-## Free deployment (Render + Neon)
+## Architecture and Documentation
 
-The repository includes a `render.yaml` blueprint and a production Docker command. The intended free stack is:
+The repository includes additional documentation covering the product scope, data model, and architectural decisions:
 
-- **Render** free web service for the Django application.
-- **Neon** free PostgreSQL for the database.
+- [Product definition](docs/01-product-definition.en.md)
+- [Data model](docs/02-data-model.en.md)
+- [Architecture decisions](docs/03-architecture-decisions.en.md)
 
-Render's free PostgreSQL expires after 30 days, so it is not used here. Neon's free database persists and its compute scales to zero when idle. Render free web services also spin down after 15 minutes without traffic, so the first request after an idle period may be slow.
+## REST API
 
-1. Create a Neon project (AWS `us-east-1` is a reasonable default). Copy the database host, database name, user, and password. Keep SSL required.
-2. Push this repository to GitHub.
-3. In Render, choose **New > Blueprint**, connect the repository, and apply `render.yaml`.
-4. Enter the Neon values for `POSTGRES_HOST`, `POSTGRES_DB`, `POSTGRES_USER`, and `POSTGRES_PASSWORD` when Render prompts. The other values are defined in the blueprint.
-5. After the first deploy, open the Render Shell and create the initial administrator:
-
-```bash
-python manage.py createsuperuser
-python manage.py shell -c "from apps.accounts.models import User; user = User.objects.get(username='admin'); user.role = User.Role.ADMINISTRATOR; user.save(update_fields=['role'])"
-```
-
-Replace `admin` with the username you created. Then open `https://<service-name>.onrender.com/accounts/login/`.
-
-Production environment variables:
-
-| Variable | Value |
-|---|---|
-| `DJANGO_DEBUG` | `false` |
-| `DJANGO_SECRET_KEY` | Generated by Render |
-| `DJANGO_ALLOWED_HOSTS` | `.onrender.com` |
-| `DJANGO_CSRF_TRUSTED_ORIGINS` | `https://*.onrender.com` |
-| `DJANGO_SECURE_SSL_REDIRECT` | `false` (Render provides HTTPS; enable only if your health check still passes) |
-| `POSTGRES_HOST` | Neon host |
-| `POSTGRES_PORT` | `5432` |
-| `POSTGRES_DB` | Neon database |
-| `POSTGRES_USER` | Neon user |
-| `POSTGRES_PASSWORD` | Neon password |
-| `POSTGRES_SSLMODE` | `require` |
-
-The container runs migrations on startup, collects static files during the image build, and serves them through WhiteNoise. If you use a custom domain, update `DJANGO_ALLOWED_HOSTS` and `DJANGO_CSRF_TRUSTED_ORIGINS` accordingly.
-
-## API
+The API is available under `/api/v1/`.
 
 Core endpoints:
 
-- `POST /api/v1/auth/token/`
-- `/api/v1/projects/`
-- `/api/v1/memberships/`
-- `/api/v1/samples/`
-- `/api/v1/datasets/`
+| Resource       | Endpoint                   |
+| -------------- | -------------------------- |
+| Authentication | `POST /api/v1/auth/token/` |
+| Projects       | `/api/v1/projects/`        |
+| Memberships    | `/api/v1/memberships/`     |
+| Samples        | `/api/v1/samples/`         |
+| Datasets       | `/api/v1/datasets/`        |
 
-All resource endpoints require authentication and use pagination with 20 records per page. The token endpoint accepts a username and password. Supported query parameters:
+The API supports session authentication and token authentication. Resource endpoints require authentication and use pagination with 20 records per page.
 
-- Projects: `q` (name), `status`.
-- Memberships: `project` (UUID).
-- Samples: `q` (code), `type`, `status`, `project` (UUID).
-- Datasets: `q` (name), `data_format`, `project` (UUID).
+Supported query parameters include:
 
-Membership create and delete operations are restricted to the project creator or an administrator. Inaccessible records return the same not-found response as records that do not exist. Dataset `data_format` is used instead of `format` because `format` is reserved by Django REST Framework for response format selection.
+- **Projects:** `q` (name), `status`.
+- **Memberships:** `project` (UUID).
+- **Samples:** `q` (code), `type`, `status`, `project` (UUID).
+- **Datasets:** `q` (name), `data_format`, `project` (UUID).
 
-## Tests and checks
+Membership creation and deletion are restricted to project creators and administrators. Access to unavailable resources follows consistent permission-handling rules.
+
+## Testing and Code Quality
+
+The project includes automated tests covering:
+
+- Domain models and validation rules.
+- Role-based permissions.
+- Project and membership workflows.
+- Sample and dataset relationships.
+- HTML views and forms.
+- Administrative user management.
+- REST API behavior and authentication.
+- Demo data loading and idempotency.
+
+Run the checks locally:
 
 ```bash
 uv run pytest
@@ -127,23 +111,123 @@ uv run python manage.py check
 uv run python manage.py makemigrations --check --dry-run
 ```
 
-The test suite and CI use PostgreSQL 17, matching the development and production database engine.
+The test suite and CI use PostgreSQL 17, matching the database engine used in development and production.
 
-## Project status
+## Demo Environment
 
-| Area | Status |
-|---|---|
-| Product scope | Specified |
-| Initial data model | Implemented (models, constraints, migrations) |
-| Architecture decisions | Specified |
-| Django implementation | Implemented core (HTML workflows, user management, API) |
-| Automated tests | Domain, permissions, HTML workflows, admin forms, user management, and API tests |
-| Deployment | Prepared for Render + Neon; not deployed |
+The application is deployed on Render and uses Neon as its PostgreSQL database provider.
 
-## Safety and demo data
+- **Application:** [https://labtrack-8zwv.onrender.com/](https://labtrack-8zwv.onrender.com/)
+- **Database:** Neon PostgreSQL.
+- **Demo content:** Synthetic users, research projects, samples, and datasets.
 
-Only synthetic data may be committed. Never commit secrets, real research or participant data, institutional records, database dumps, or code from third-party/client projects.
+The free Render service may spin down after a period of inactivity. Consequently, the first request after inactivity can take longer than usual.
+
+## Local Development
+
+Running the application locally is not required to explore the live demo.
+
+The project provides a Docker Compose environment that runs both the Django application and PostgreSQL database as separate services.
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Run with Docker Compose
+
+Clone the repository and configure the environment:
+
+```bash
+git clone https://github.com/tahielbastiani92/labtrack.git
+cd labtrack
+
+cp .env.example .env
+docker compose up --build
+```
+
+Docker Compose starts two services:
+
+- **web:** Django application, running on port `8000`.
+- **db:** PostgreSQL 17 database, exposed on host port `5434`.
+
+Database migrations are applied automatically when the web container starts.
+
+The application is available at:
+
+**http://localhost:8000/**
+
+To create the initial administrator account:
+
+```bash
+docker compose exec web python manage.py createsuperuser
+```
+
+After creating the superuser, assign the application role `administrator` through the Django admin or shell. The application role is independent of Django's `is_staff` and `is_superuser` flags.
+
+To stop the services:
+
+```bash
+docker compose down
+```
+
+To stop the services and remove the local database volume:
+
+```bash
+docker compose down -v
+```
+
+**Note:** The last command permanently deletes the local PostgreSQL data.
+
+### Run Django Directly (Alternative)
+
+Developers who prefer not to run the Django application in Docker can use `uv` locally while keeping PostgreSQL in Docker.
+
+Prerequisites:
+
+- Python 3.13
+- [uv](https://docs.astral.sh/uv/)
+- Docker with Docker Compose
+
+```bash
+cp .env.example .env
+uv sync
+docker compose up -d db
+uv run python manage.py migrate
+uv run python manage.py createsuperuser
+uv run python manage.py runserver
+```
+
+The Django development server is available at **http://localhost:8000/**.
+
+## Project Status
+
+The MVP implementation is complete and deployed.
+
+| Area                                      | Status      |
+| ----------------------------------------- | ----------- |
+| Product scope and architecture            | Completed   |
+| Data models and migrations                | Completed   |
+| Authentication and role-based permissions | Implemented |
+| Project and membership workflows          | Implemented |
+| Sample management                         | Implemented |
+| Dataset management                        | Implemented |
+| HTML interface                            | Implemented |
+| REST API                                  | Implemented |
+| Automated tests                           | Implemented |
+| CI workflow                               | Configured  |
+| Production deployment                     | Live        |
+
+## Safety and Demo Data
+
+LabTrack uses synthetic demonstration data only.
+
+No real research data, participant information, institutional records, client data, or third-party proprietary code should be committed to this repository.
+
+Never commit environment files containing secrets, database credentials, API tokens, or production configuration.
 
 ## License
 
-A license has not yet been selected. Do not add a license until the repository owner chooses one. Making a GitHub repository public without a license does not automatically grant broad reuse rights to others.
+No license has been selected for this project yet.
+
+Making this repository public does not automatically grant permission to reuse, distribute, or modify its contents.
