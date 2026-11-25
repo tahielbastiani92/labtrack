@@ -11,9 +11,6 @@
                 </div>
                 <div class="card-body">
 
-                    <p>Context user: {{ user.username }}</p>
-                    <p>Request user: {{ request.user.username }}</p>
-                    <p>Authenticated ID: {{ request.user.pk }}</p>
                     {% if target_user and target_user.pk == user.pk %}
                         <div class="alert alert-info">
                             You are editing your own account. Your account cannot be deactivated or lose its
